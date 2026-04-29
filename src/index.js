@@ -1,45 +1,58 @@
 import { coerce, satisfies, validRange } from 'semver';
 
 /**
- * A map of named semver range requirements.
+ * A record of semver range strings (e.g. `{ node: '>=18', myLib: '^2.0' }`).
  *
- * @example { node: '>=18', myLib: '>=2.0' }
- *
- * @typedef { Record<string, string> } Requirements
+ * @typedef { Record<string, string> } SemverRanges
  */
 
 /**
- * A map of concrete version strings to check against requirements.
- * Versions are coerced to semver, so non-standard formats such as `18.0` or
- * `18.0.0.Final` are accepted.
+ * A record of concrete version strings (e.g. `{ node: '20.0', myLib: '1.5' }`).
  *
- * @example { node: '20.0', myLib: '1.5' }
- *
- * @typedef { Record<string, string> } Provided
+ * @typedef { Record<string, string> } SemverVersions
  */
 
-/**
- * Details about a single version mismatch.
- *
- * @typedef { { required: string, provided: string } } Mismatch
- */
 
 /**
- * Returns the subset of `required` whose range is not satisfied by the
- * corresponding version in `provided`.
+ * Returns `true` if all entries present in both `required` and `provided` are
+ * compatible.
  *
  * Rules:
- * - Keys present in `required` but absent from `provided` are skipped.
+ * - Only keys present in both `required` and `provided` are checked.
  * - Entries in `provided` whose value cannot be coerced to semver are skipped.
  * - Entries in `required` with an invalid semver range are skipped.
  *
- * @param { Requirements } required
- * @param { Provided } provided
- * @returns { Record<string, Mismatch> }
+ * @param { SemverRanges } required
+ * @param { SemverVersions } provided
+ * @returns { boolean }
  */
-export function getIncompatible(required, provided) {
+export function isCompatible(required, provided) {
+  for (const [ name, range ] of Object.entries(required)) {
+    const version = provided[name];
 
-  /** @type { Record<string, Mismatch> } */
+    if (!version) {
+      continue;
+    }
+
+    if (isSatisfied(range, version) === false) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+/**
+ * Returns the subset of `required` whose range is satisfied by the
+ * corresponding version in `provided`.
+ *
+ * @param { SemverRanges } required
+ * @param { SemverVersions } provided
+ * @returns { SemverVersions }
+ */
+export function getCompatible(required, provided) {
+
+  /** @type { SemverVersions } */
   const result = {};
 
   for (const [ name, range ] of Object.entries(required)) {
@@ -49,18 +62,8 @@ export function getIncompatible(required, provided) {
       continue;
     }
 
-    if (!validRange(range)) {
-      continue;
-    }
-
-    const coerced = coerce(version);
-
-    if (!coerced) {
-      continue;
-    }
-
-    if (!satisfies(coerced, range)) {
-      result[name] = { required: range, provided: version };
+    if (isSatisfied(range, version) === true) {
+      result[name] = version;
     }
   }
 
@@ -68,13 +71,51 @@ export function getIncompatible(required, provided) {
 }
 
 /**
- * Returns true if all entries present in both `required` and `provided` are
- * compatible, i.e. `getIncompatible` returns an empty object.
+ * Returns the subset of `versions` whose version can be coerced to a valid
+ * semver string, with values normalized to standard semver format.
  *
- * @param { Requirements } required
- * @param { Provided } provided
- * @returns {boolean}
+ * @example
+ * getCoerced({ node: '20', myLib: '18.0.0.Final', broken: 'not-a-version' })
+ * // => { node: '20.0.0', myLib: '18.0.0' }
+ *
+ * @param { SemverVersions } versions
+ * @returns { SemverVersions }
  */
-export function isCompatible(required, provided) {
-  return Object.keys(getIncompatible(required, provided)).length === 0;
+export function getCoerced(versions) {
+
+  /** @type { SemverVersions } */
+  const result = {};
+
+  for (const [ name, version ] of Object.entries(versions)) {
+    const coerced = coerce(version);
+
+    if (coerced) {
+      result[name] = coerced.version;
+    }
+  }
+
+  return result;
+}
+
+/**
+ * Returns `true` if the provided version satisfies the required semver range,
+ * `false` if it does not, or `null` if the check should be skipped (invalid range
+ * or uncoercible version).
+ *
+ * @param { string } range
+ * @param { string } version
+ * @returns { boolean | null }
+ */
+export function isSatisfied(range, version) {
+  if (!validRange(range)) {
+    return null;
+  }
+
+  const coerced = coerce(version);
+
+  if (!coerced) {
+    return null;
+  }
+
+  return satisfies(coerced, range);
 }
