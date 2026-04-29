@@ -1,9 +1,30 @@
 {
   "name": "@bpmn-io/semver-compat",
   "version": "0.1.0",
-  "description": "Check whether provided engine versions satisfy semver requirements",
+  "description": "Check whether provided semver versions satisfy required ranges",
   "type": "module",
   "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.ts"
+    },
+    "./package.json": "./package.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bpmn-io/semver-compat.git"
+  },
+  "author": "bpmn.io contributors",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bpmn-io/semver-compat/issues"
+  },
+  "homepage": "https://github.com/bpmn-io/semver-compat#readme",
   "scripts": {
     "all": "run-s lint build check-types test",
     "build": "rollup -c --bundleConfigAsCjs",
@@ -11,6 +32,9 @@
     "lint": "eslint .",
     "prepare": "run-s build",
     "check-types": "tsc --noEmit"
+  },
+  "dependencies": {
+    "semver": "^7.7.2"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^28.0.0",
@@ -24,28 +48,6 @@
     "mocha": "^11.0.0",
     "npm-run-all2": "^8.0.0",
     "rollup": "^4.0.0",
-    "semver": "^7.7.2",
     "typescript": "^5.0.0"
-  },
-  "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs",
-      "types": "./dist/index.d.ts"
-    },
-    "./package.json": "./package.json"
-  },
-  "files": [
-    "dist"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/bpmn-io/semver-compat.git"
-  },
-  "author": "bpmn.io contributors",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/bpmn-io/semver-compat/issues"
-  },
-  "homepage": "https://github.com/bpmn-io/semver-compat#readme"
+  }
 }
