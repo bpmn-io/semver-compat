@@ -1,5 +1,7 @@
 # @bpmn-io/semver-compat
 
+[![CI](https://github.com/jarekdanielak/semver-compat/actions/workflows/CI.yml/badge.svg)](https://github.com/jarekdanielak/semver-compat/actions/workflows/CI.yml)
+
 Check whether provided semver versions satisfy required ranges.
 
 ## Installation
