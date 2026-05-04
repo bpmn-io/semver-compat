@@ -9,8 +9,11 @@ export default [
   {
     input: srcEntry,
     output: [
-      { file: pkg.exports['.'].require, format: 'cjs' },
-      { file: pkg.exports['.'].import, format: 'es' }
+      {
+        format: 'es',
+        file: pkg.exports['.'],
+        sourcemap: true
+      }
     ],
     plugins: [
       nodeResolve(),
