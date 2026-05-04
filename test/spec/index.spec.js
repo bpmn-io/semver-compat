@@ -1,6 +1,7 @@
 import { expect } from 'chai';
 
-import { getCoerced, getCompatible, isCompatible, isSatisfied } from '../../src/index.js';
+import { getCoerced, getCompatible, isCompatible, isSatisfied } from '@bpmn-io/semver-compat';
+
 
 describe('semver-compat', function() {
 
