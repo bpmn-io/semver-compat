@@ -8,7 +8,7 @@ const files = {
     '*.js'
   ],
   test: [
-    'test/**/*.js'
+    'test/**/*.{js,cjs}'
   ]
 };
 
