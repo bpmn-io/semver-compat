@@ -27,7 +27,7 @@
   "homepage": "https://github.com/bpmn-io/semver-compat#readme",
   "scripts": {
     "all": "run-s lint build check-types test",
-    "build": "rollup -c --bundleConfigAsCjs",
+    "build": "rollup -c",
     "test": "mocha --recursive test",
     "lint": "eslint .",
     "prepare": "run-s build",

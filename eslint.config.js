@@ -24,6 +24,16 @@ export default [
       files: files.build
     };
   }),
+  {
+    languageOptions: {
+      parserOptions: {
+        ecmaVersion: 'latest'
+      }
+    },
+    files: [
+      './rollup.config.js'
+    ]
+  },
 
   // lib
   ...bpmnIoPlugin.configs.recommended.map(config => {
