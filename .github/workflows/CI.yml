@@ -21,5 +21,5 @@ jobs:
         run: npm ci
       - name: Setup project
         uses: bpmn-io/actions/setup@latest
-      - name: All
+      - name: Build
         run: npm run all
