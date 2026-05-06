@@ -7,14 +7,13 @@
     "checkJs": true,
     "module": "nodenext",
     "moduleResolution": "nodenext",
+    "rootDir": "src",
     "declarationDir": "dist",
     "declaration": true,
     "emitDeclarationOnly": true,
-    "skipLibCheck": true,
-    "types": [ "mocha" ]
+    "skipLibCheck": true
   },
   "include": [
-    "src",
-    "test"
+    "src"
   ]
 }
