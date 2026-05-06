@@ -27,10 +27,9 @@
   "homepage": "https://github.com/bpmn-io/semver-compat#readme",
   "scripts": {
     "all": "run-s lint build check-types test",
-    "build": "rollup -c",
+    "build": "rollup -c && tsc",
     "test": "mocha --recursive test",
     "lint": "eslint .",
-    "prepare": "run-s build",
     "check-types": "tsc --noEmit"
   },
   "dependencies": {
