@@ -11,7 +11,7 @@ export default [
     output: [
       {
         format: 'es',
-        file: pkg.exports['.'],
+        file: pkg.exports['.'].default,
         sourcemap: true
       }
     ],
