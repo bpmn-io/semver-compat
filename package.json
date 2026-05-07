@@ -30,6 +30,7 @@
     "build": "rollup -c && tsc",
     "test": "mocha --recursive test",
     "lint": "eslint .",
+    "prepare": "run-s build",
     "check-types": "tsc --noEmit"
   },
   "dependencies": {
